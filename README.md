@@ -2,7 +2,12 @@
 
 ### Prerequisites
 
+
 **Node version 14.x**
+
+**To use clerk authentication, you must first set up shecan [shecan](https://shecan.ir/)DNS**
+
+- DNS: 178.22.122.100 – 185.51.200.2
 
 ### Cloning the repository
 
@@ -17,7 +22,6 @@ npm i
 ```
 
 ### Setup .env file
-
 
 ```js
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
@@ -42,11 +46,11 @@ STRIPE_WEBHOOK_SECRET=
 ```
 
 ### Connect to PlanetScale and Push Prisma
+
 ```shell
 npx prisma generate
 npx prisma db push
 ```
-
 
 ### Start the app
 
@@ -54,6 +58,3 @@ npx prisma db push
 npm run dev
 ```
 
-| command         | description                              |
-| :-------------- | :--------------------------------------- |
-| `dev`           | Starts a development instance of the app |
