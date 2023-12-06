@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useStoreModal } from "@/hook/use-store-modal";
@@ -22,13 +23,14 @@ const formSchema = z.object({
 });
 export default function StoreModal() {
   const storeModal = useStoreModal();
-
+  const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
     },
   });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
@@ -51,14 +53,22 @@ export default function StoreModal() {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="userName" {...field} />
+                    <Input
+                      disabled={loading}
+                      placeholder="userName"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className="pt-6 space-x-2 w-full flex items-center justify-end">
-              <Button variant={"outline"} onClick={storeModal.onClose}>
+              <Button
+                disabled={loading}
+                variant={"outline"}
+                onClick={storeModal.onClose}
+              >
                 Cancel
               </Button>
               <Button type="submit">Continue</Button>
