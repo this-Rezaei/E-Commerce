@@ -1,14 +1,15 @@
 "use client";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 import * as z from "zod";
 import { useStoreModal } from "@/hook/use-store-modal";
 import { Modal } from "@/components/ui/modal";
 import { zodResolver } from "@hookform/resolvers/zod";
+import toast, { Toast } from "react-hot-toast";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,8 +17,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
 const formSchema = z.object({
-  username: z.string().min(2, {
+  name: z.string().min(2, {
     message: "Username Required",
   }),
 });
@@ -27,19 +29,26 @@ export default function StoreModal() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      name: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/stores", values);
+      console.log(response.data);
+      toast.success("store created .");
+    } catch (error) {
+      toast.error("Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Modal
       title="create store"
-      description="kfgfnhgkfnsdnfdhnfn"
+      description="Add a new store to manage products and categores"
       isOpen={storeModal.isOpen}
       onClose={storeModal.onClose}
     >
@@ -48,7 +57,7 @@ export default function StoreModal() {
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
-              name="username"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Username</FormLabel>
@@ -71,7 +80,9 @@ export default function StoreModal() {
               >
                 Cancel
               </Button>
-              <Button type="submit">Continue</Button>
+              <Button disabled={loading} type="submit">
+                Continue
+              </Button>
             </div>
           </form>
         </Form>

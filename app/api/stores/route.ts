@@ -1,6 +1,5 @@
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
-import { Store } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -21,6 +20,7 @@ export async function POST(req: Request) {
     const store = await prismadb.store.create({
       data: newUser,
     });
+    return NextResponse.json(store);
   } catch (error) {
     console.log(`[STORES_POST]`, error);
     return new NextResponse("Intrnal error", { status: 500 });
