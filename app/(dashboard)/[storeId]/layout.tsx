@@ -1,3 +1,4 @@
+import Navbar from "@/components/navbar";
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
@@ -8,11 +9,8 @@ export default async function DashboardLayout({
   children: React.ReactNode;
   params: { storeId: string };
 }) {
-  console.log("render DashboardLayout");
-
   const { userId } = auth();
 
-  console.log("id", userId);
   if (!userId) {
     redirect("/sign-in");
   }
@@ -27,7 +25,7 @@ export default async function DashboardLayout({
   }
   return (
     <>
-      <div> This will be a NavBar</div>
+      <Navbar />
       {children}
     </>
   );
